@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-
+import './sorting/sortingAlgorithms.dart';
 import 'package:flutter/material.dart';
 import 'package:sorting_algorithm_visualizer/painter/barPainter.dart';
 
@@ -29,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<int> _numbers = [];
-  int _sampleSize = 200;
+  int _sampleSize = 100;
   String _sortingMethod = 'Bubble';
 
   StreamController<List<int>> _streamController;
@@ -43,56 +43,31 @@ class _MyHomePageState extends State<MyHomePage> {
     _streamController.add(_numbers);
   }
 
-  _bubbleSort() async {
-    for (int i = 0; i < _sampleSize; ++i) {
-      for (int j = 0; j < _numbers.length - i - 1; ++j) {
-        if (_numbers[j] > _numbers[j + 1]) {
-          int temp = _numbers[j];
-          _numbers[j] = _numbers[j + 1];
-          _numbers[j + 1] = temp;
-        }
-        await Future.delayed(Duration(microseconds: 500));
-        _streamController.add(_numbers);
-      }
-    }
-  }
-
-  heapify(List<int> arr, int n, int i) {
-    int largest = i;
-    int l = 2 * i + 1;
-    int r = 2 * i + 2;
-
-    if (l < n && arr[l] > arr[largest]) largest = l;
-
-    if (r < n && arr[r] > arr[largest]) largest = r;
-
-    if (largest != i) {
-      int temp = _numbers[i];
-      _numbers[i] = _numbers[largest];
-      _numbers[largest] = temp;
-      heapify(arr, n, largest);
-    }
-  }
-
-  _heapSort() async {
-    for (int i = _numbers.length ~/ 2; i >= 0; i--) {
-      await heapify(_numbers, _numbers.length, i);
-      _streamController.add(_numbers);
-    }
-    for (int i = _numbers.length - 1; i >= 0; i--) {
-      int temp = _numbers[0];
-      _numbers[0] = _numbers[i];
-      _numbers[i] = temp;
-      await Future.delayed(Duration(microseconds: 500));
-      await heapify(_numbers, i, 0);
-      _streamController.add(_numbers);
-    }
-  }
-
   _sort() async {
-    if (_sortingMethod == 'Bubble')
-      _bubbleSort();
-    else if (_sortingMethod == 'Heap') _heapSort();
+    final sort = Sort(
+        numbers: _numbers,
+        sampleSize: _sampleSize,
+        streamController: _streamController);
+    switch (_sortingMethod) {
+      case 'Bubble':
+        await sort.bubbleSort();
+        break;
+      case 'Heap':
+        await sort.heapSort();
+        break;
+      case 'Selection':
+        await sort.selectionSort();
+        break;
+      case 'Insertion':
+        await sort.insertionSort();
+        break;
+      case 'Quick':
+        await sort.quickSort(0, _sampleSize.toInt() - 1);
+        break;
+      case 'Merge':
+        await sort.mergeSort(0, _sampleSize.toInt() - 1);
+        break;
+    }
   }
 
   @override
@@ -123,19 +98,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text("Heap Sort"),
                 ),
                 PopupMenuItem(
-                  value: 'selection',
+                  value: 'Selection',
                   child: Text("Selection Sort"),
                 ),
                 PopupMenuItem(
-                  value: 'insertion',
+                  value: 'Insertion',
                   child: Text("Insertion Sort"),
                 ),
                 PopupMenuItem(
-                  value: 'quick',
+                  value: 'Quick',
                   child: Text("Quick Sort"),
                 ),
                 PopupMenuItem(
-                  value: 'merge',
+                  value: 'Merge',
                   child: Text("Merge Sort"),
                 ),
               ];
