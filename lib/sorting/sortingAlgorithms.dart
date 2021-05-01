@@ -4,7 +4,8 @@ class Sort {
   int sampleSize;
   List<int> numbers;
   StreamController streamController;
-  Sort({this.numbers, this.sampleSize, this.streamController});
+  int delayTime;
+  Sort({this.numbers, this.sampleSize, this.streamController, this.delayTime});
   void bubbleSort() async {
     for (int i = 0; i < sampleSize; ++i) {
       for (int j = 0; j < numbers.length - i - 1; ++j) {
@@ -13,7 +14,7 @@ class Sort {
           numbers[j] = numbers[j + 1];
           numbers[j + 1] = temp;
         }
-        await Future.delayed(Duration(microseconds: 500));
+        await Future.delayed(Duration(microseconds: delayTime));
         streamController.add(numbers);
       }
     }
@@ -46,7 +47,7 @@ class Sort {
         int temp = numbers[0];
         numbers[0] = numbers[i];
         numbers[i] = temp;
-        await Future.delayed(Duration(microseconds: 500));
+        await Future.delayed(Duration(microseconds: delayTime));
         await heapify(numbers, i, 0);
         streamController.add(numbers);
       }
@@ -65,7 +66,7 @@ class Sort {
           numbers[i] = temp;
         }
 
-        await Future.delayed(Duration(microseconds: 500));
+        await Future.delayed(Duration(microseconds: delayTime));
 
         streamController.add(numbers);
       }
@@ -80,12 +81,12 @@ class Sort {
       while (j >= 0 && temp < numbers[j]) {
         numbers[j + 1] = numbers[j];
         --j;
-        await Future.delayed(Duration(microseconds: 500));
+        await Future.delayed(Duration(microseconds: delayTime));
 
         streamController.add(numbers);
       }
       numbers[j + 1] = temp;
-      await Future.delayed(Duration(microseconds: 500));
+      await Future.delayed(Duration(microseconds: delayTime));
 
       streamController.add(numbers);
     }
@@ -109,7 +110,7 @@ class Sort {
       var temp = numbers[p];
       numbers[p] = numbers[right];
       numbers[right] = temp;
-      await Future.delayed(Duration(microseconds: 500));
+      await Future.delayed(Duration(microseconds: delayTime));
 
       streamController.add(numbers);
 
@@ -122,7 +123,7 @@ class Sort {
           numbers[cursor] = temp;
           cursor++;
 
-          await Future.delayed(Duration(microseconds: 500));
+          await Future.delayed(Duration(microseconds: delayTime));
 
           streamController.add(numbers);
         }
@@ -132,7 +133,7 @@ class Sort {
       numbers[right] = numbers[cursor];
       numbers[cursor] = temp;
 
-      await Future.delayed(Duration(microseconds: 500));
+      await Future.delayed(Duration(microseconds: delayTime));
 
       streamController.add(numbers);
 
@@ -172,7 +173,7 @@ class Sort {
           j++;
         }
 
-        await Future.delayed(Duration(microseconds: 500));
+        await Future.delayed(Duration(microseconds: delayTime));
         streamController.add(numbers);
 
         k++;
@@ -183,7 +184,7 @@ class Sort {
         i++;
         k++;
 
-        await Future.delayed(Duration(microseconds: 500));
+        await Future.delayed(Duration(microseconds: delayTime));
         streamController.add(numbers);
       }
 
@@ -192,7 +193,7 @@ class Sort {
         j++;
         k++;
 
-        await Future.delayed(Duration(microseconds: 500));
+        await Future.delayed(Duration(microseconds: delayTime));
         streamController.add(numbers);
       }
     }
@@ -203,7 +204,7 @@ class Sort {
       await mergeSort(leftIndex, middleIndex);
       await mergeSort(middleIndex + 1, rightIndex);
 
-      await Future.delayed(Duration(microseconds: 500));
+      await Future.delayed(Duration(microseconds: delayTime));
 
       streamController.add(numbers);
 
