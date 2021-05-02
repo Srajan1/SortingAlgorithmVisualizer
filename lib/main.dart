@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/services.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sorting_algorithm_visualizer/widgets.dart/speedDial.dart';
 import './sorting/sortingAlgorithms.dart';
@@ -40,16 +40,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  double testValue = 5.1;
   List<int> _numbers = [];
-  int _sampleSize = 100;
+  int sampleSize = 20;
   String _sortingMethod = 'Bubble';
   int delayTime = 1000;
   StreamController<List<int>> _streamController;
   Stream<List<int>> _stream;
 
   _randomize() {
+    print("randomizing");
     _numbers = [];
-    for (int i = 0; i < _sampleSize; ++i) {
+    for (int i = 0; i < sampleSize; ++i) {
       _numbers.add(Random().nextInt(500));
     }
     _streamController.add(_numbers);
@@ -58,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   _sort() async {
     final sort = Sort(
         numbers: _numbers,
-        sampleSize: _sampleSize,
+        sampleSize: sampleSize,
         streamController: _streamController,
         delayTime: delayTime);
     switch (_sortingMethod) {
@@ -75,10 +77,10 @@ class _MyHomePageState extends State<MyHomePage> {
         await sort.insertionSort();
         break;
       case 'Quick':
-        await sort.quickSort(0, _sampleSize.toInt() - 1);
+        await sort.quickSort(0, sampleSize.toInt() - 1);
         break;
       case 'Merge':
-        await sort.mergeSort(0, _sampleSize.toInt() - 1);
+        await sort.mergeSort(0, sampleSize.toInt() - 1);
         break;
     }
   }
@@ -91,33 +93,13 @@ class _MyHomePageState extends State<MyHomePage> {
     _randomize();
   }
 
-  _showMaterialDialog() {
-    showDialog(
-        context: context,
-        builder: (_) => new AlertDialog(
-              actions: <Widget>[
-                Form(
-                  child: Column(
-                    children: [],
-                  ),
-                ),
-                FlatButton(
-                  child: Text('Close me!'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFFFFFFF),
         title: Text(
-          'Sorting visualizer',
+          'Sorting $testValue',
           style: GoogleFonts.questrial(
             color: Colors.blue,
             fontWeight: FontWeight.w900,
@@ -165,26 +147,84 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: Container(
-        child: StreamBuilder<Object>(
-            stream: _stream,
-            builder: (context, snapshot) {
-              int _counter = 0;
-              return Row(
-                  children: _numbers.map((int number) {
-                _counter++;
-                return CustomPaint(
-                  painter: BarPainter(
-                      width:
-                          MediaQuery.of(context).size.width ~/ _sampleSize + 1,
-                      value: number,
-                      index: _counter),
-                );
-              }).toList());
-            }),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            child: StreamBuilder<Object>(
+                stream: _stream,
+                builder: (context, snapshot) {
+                  int _counter = 0;
+                  return Row(
+                      children: _numbers.map((int number) {
+                    _counter++;
+                    return CustomPaint(
+                      painter: BarPainter(
+                          width:
+                              (MediaQuery.of(context).size.width / sampleSize)
+                                  .round(),
+                          value: number,
+                          index: _counter),
+                    );
+                  }).toList());
+                }),
+          ),
+          Column(
+            children: [
+              Column(
+                children: [
+                  Text('Delay time (pause between each swap)'),
+                  Slider(
+                    value: delayTime.toDouble(),
+                    min: 500,
+                    max: 2000,
+                    label: '$delayTime',
+                    divisions: 10,
+                    onChanged: (double value) {
+                      setState(() {
+                        delayTime = value.round();
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  Text('Array size'),
+                  Slider(
+                    value: sampleSize.toDouble(),
+                    min: 20,
+                    max: 100,
+                    label: '$sampleSize',
+                    divisions: 10,
+                    onChanged: (double value) {
+                      _randomize();
+                      setState(() {
+                        sampleSize = value.round();
+                      });
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              FlatButton(
+                  color: Colors.blue[900],
+                  child: Text(
+                    'Stop Sorting',
+                    style: GoogleFonts.questrial(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  onPressed: _randomize)
+            ],
+          ),
+        ],
       ),
-      floatingActionButton:
-          speedDial(_randomize, _sort, _showMaterialDialog, _sortingMethod),
+      floatingActionButton: speedDial(_randomize, _sort, _sortingMethod),
     );
   }
 }
