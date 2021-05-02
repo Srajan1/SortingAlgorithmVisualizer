@@ -40,7 +40,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  double testValue = 5.1;
   List<int> _numbers = [];
   int sampleSize = 20;
   String _sortingMethod = 'Bubble';
@@ -99,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Color(0xFFFFFFFF),
         title: Text(
-          'Sorting $testValue',
+          'Sorting',
           style: GoogleFonts.questrial(
             color: Colors.blue,
             fontWeight: FontWeight.w900,
@@ -173,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Column(
                 children: [
-                  Text('Delay time (pause between each swap)'),
+                  Text('Delay time (pause between each swap) $delayTime μs '),
                   Slider(
                     value: delayTime.toDouble(),
                     min: 500,
@@ -190,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Column(
                 children: [
-                  Text('Array size'),
+                  Text('Array size $sampleSize'),
                   Slider(
                     value: sampleSize.toDouble(),
                     min: 20,
@@ -207,19 +206,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: 60,
               ),
-              FlatButton(
-                  color: Colors.blue[900],
-                  child: Text(
-                    'Stop Sorting',
-                    style: GoogleFonts.questrial(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  onPressed: _randomize)
             ],
           ),
         ],

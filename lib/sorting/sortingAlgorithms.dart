@@ -40,7 +40,7 @@ class Sort {
 
     heapSort() async {
       for (int i = numbers.length ~/ 2; i >= 0; i--) {
-        await heapify(numbers, numbers.length, i);
+        heapify(numbers, numbers.length, i);
         streamController.add(numbers);
       }
       for (int i = numbers.length - 1; i >= 0; i--) {
@@ -48,7 +48,7 @@ class Sort {
         numbers[0] = numbers[i];
         numbers[i] = temp;
         await Future.delayed(Duration(microseconds: delayTime));
-        await heapify(numbers, i, 0);
+        heapify(numbers, i, 0);
         streamController.add(numbers);
       }
     }
@@ -57,7 +57,6 @@ class Sort {
   }
 
   selectionSort() async {
-    print('here');
     for (int i = 0; i < numbers.length; i++) {
       for (int j = i + 1; j < numbers.length; j++) {
         if (numbers[i] > numbers[j]) {
