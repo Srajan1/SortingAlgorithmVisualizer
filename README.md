@@ -1,16 +1,17 @@
 # sorting_algorithm_visualizer
 
-A new Flutter project.
+A projects to visualize various sorting algorithms and compare them to each other.
 
-## Getting Started
+## The following page displays the various array elements as bars, whose length is proportional to element's value. The higher the value the darker the bar. 📈📈
+![Home page](./assets/images/home.png)
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Using the action in the appbar, user can select between different sorting algorithms and visualize each pf them differenty.
+![Different algo](./assets/images/differentAlgo.png)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## The floating button holds the option to randomize the array and the sort button displays the current sorting algo that is selected
+![Floating options](./assets/images/floatingButton.png)
+
+## This is how it looks after sorting
+![Sorted](./assets/images/sorted.png)
